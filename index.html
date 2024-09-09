@@ -1,0 +1,614 @@
+<html>
+  <head>
+    <title>
+      VoituresOccasion - Votre partenaire de confiance pour l'achat de véhicules
+      d'occasion
+    </title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Découvrez notre large sélection de voitures d'occasion de qualité. Trouvez le véhicule parfait grâce à notre moteur de recherche avancé, nos outils de comparaison et nos services de financement."
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-color: #1a5f7a;
+        --secondary-color: #f1f1f1;
+        --accent-color: #ff6b35;
+        --text-color: #333;
+        --light-gray: #e0e0e0;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        margin: 0;
+        padding: 0;
+        color: var(--text-color);
+        background-color: #fff;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      header {
+        background-color: var(--primary-color);
+        color: #fff;
+        padding: 20px 0;
+      }
+
+      nav ul {
+        list-style-type: none;
+        padding: 0;
+        display: flex;
+        justify-content: space-around;
+      }
+
+      nav ul li a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      h1,
+      h2,
+      h3 {
+        color: var(--primary-color);
+      }
+
+      .hero {
+        background-image: url("https://voituresoccasion.fr/images/hero-background.jpg");
+        background-size: cover;
+        background-position: center;
+        height: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #fff;
+      }
+
+      .hero h1 {
+        font-size: 3em;
+        margin-bottom: 20px;
+        color: #fff;
+      }
+
+      .search-container {
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 20px;
+        border-radius: 5px;
+      }
+
+      .search-form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .search-form select,
+      .search-form input {
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        flex-grow: 1;
+      }
+
+      .search-form button {
+        background-color: var(--accent-color);
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 3px;
+        cursor: pointer;
+        flex-grow: 1;
+      }
+
+      .featured-cars,
+      .latest-offers,
+      .services,
+      .testimonials {
+        margin-top: 50px;
+      }
+
+      .car-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      .car-card {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+        background-color: #fff;
+      }
+
+      .car-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .car-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
+
+      .car-info {
+        padding: 15px;
+      }
+
+      .car-title {
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .car-price {
+        color: var(--accent-color);
+        font-weight: bold;
+      }
+
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+      }
+
+      .service-card {
+        text-align: center;
+        padding: 20px;
+        background-color: var(--secondary-color);
+        border-radius: 5px;
+      }
+
+      .service-card i {
+        font-size: 3em;
+        color: var(--primary-color);
+        margin-bottom: 15px;
+      }
+
+      .testimonial-card {
+        background-color: var(--light-gray);
+        padding: 20px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+
+      .testimonial-author {
+        font-weight: bold;
+        margin-top: 10px;
+      }
+
+      footer {
+        background-color: var(--primary-color);
+        color: #fff;
+        padding: 40px 0;
+        margin-top: 50px;
+      }
+
+      .footer-content {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+
+      .footer-section {
+        flex: 1;
+        margin-right: 20px;
+        margin-bottom: 20px;
+      }
+
+      .footer-section h3 {
+        color: #fff;
+        margin-bottom: 15px;
+      }
+
+      .footer-section ul {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      .footer-section ul li {
+        margin-bottom: 10px;
+      }
+
+      .footer-section ul li a {
+        color: #fff;
+        text-decoration: none;
+      }
+
+      .social-icons {
+        display: flex;
+        gap: 10px;
+      }
+
+      .social-icons a {
+        color: #fff;
+        font-size: 1.5em;
+      }
+
+      @media (max-width: 768px) {
+        .search-form {
+          flex-direction: column;
+        }
+
+        .hero {
+          height: auto;
+          padding: 50px 0;
+        }
+
+        .footer-content {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <div class="container">
+          <nav>
+            <ul>
+              <li><a href="/">Accueil</a></li>
+              <li><a href="rechercheAvancer.html">Recherche avancée</a></li>
+              <li><a href="Comparaison.html">Comparaison</a></li>
+              <li><a href="Financement.html">Financement</a></li>
+              <li><a href="services.html">Services</a></li>
+              <li><a href="contacte.html">Contact</a></li>
+              <li><a href="loging.html">Espace client</a></li>
+            </ul>
+          </nav>
+        </div>
+      </header>
+
+      <center><h1>VoituresOccasion</h1></center>
+
+      <main>
+        <section class="hero">
+          <div class="container">
+            <h1>Trouvez la voiture de vos rêves</h1>
+            <div class="search-container">
+              <form class="search-form" @submit.prevent="searchCars">
+                <select v-model="searchParams.brand">
+                  <option value="">Marque</option>
+                  <option v-for="brand in brands" :value="brand">
+                    {{ brand }}
+                  </option>
+                </select>
+                <select v-model="searchParams.model">
+                  <option value="">Modèle</option>
+                  <option v-for="model in models" :value="model">
+                    {{ model }}
+                  </option>
+                </select>
+                <select v-model="searchParams.year">
+                  <option value="">Année</option>
+                  <option v-for="year in years" :value="year">
+                    {{ year }}
+                  </option>
+                </select>
+                <input
+                  type="number"
+                  v-model="searchParams.maxPrice"
+                  placeholder="Prix max"
+                />
+                <input
+                  type="number"
+                  v-model="searchParams.maxMileage"
+                  placeholder="Kilométrage max"
+                />
+                <select v-model="searchParams.fuelType">
+                  <option value="">Type de carburant</option>
+                  <option value="essence">Essence</option>
+                  <option value="diesel">Diesel</option>
+                  <option value="electrique">Électrique</option>
+                  <option value="hybride">Hybride</option>
+                </select>
+                <button type="submit">Rechercher</button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section class="featured-cars container">
+          <h2>Véhicules en vedette</h2>
+          <div class="car-grid">
+            <div v-for="car in featuredCars" :key="car.id" class="car-card">
+              <img src="voiture.jpg" />
+              <div class="car-info">
+                <div class="car-title">{{ car.brand }} {{ car.model }}</div>
+                <div>{{ car.year }} - {{ car.mileage }} km</div>
+                <div>{{ car.fuelType }}</div>
+                <div class="car-price">{{ car.price }} €</div>
+                <button @click="showCarDetails(car.id)">
+                  Voir les détails
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="latest-offers container">
+          <h2>Dernières offres</h2>
+          <div class="car-grid">
+            <div v-for="car in latestOffers" :key="car.id" class="car-card">
+              <img src="voiture.jpg" />
+              <div class="car-info">
+                <div class="car-title">{{ car.brand }} {{ car.model }}</div>
+                <div>{{ car.year }} - {{ car.mileage }} km</div>
+                <div>{{ car.fuelType }}</div>
+                <div class="car-price">{{ car.price }} €</div>
+                <button @click="showCarDetails(car.id)">
+                  Voir les détails
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="services container">
+          <h2>Nos services</h2>
+          <div class="services-grid">
+            <div class="service-card">
+              <i class="fas fa-car"></i>
+              <h3>Garantie véhicules</h3>
+              <p>Tous nos véhicules sont garantis pendant 12 mois minimum.</p>
+            </div>
+            <div class="service-card">
+              <i class="fas fa-money-bill-wave"></i>
+              <h3>Financement sur mesure</h3>
+              <p>
+                Bénéficiez de solutions de financement adaptées à votre budget.
+              </p>
+            </div>
+            <div class="service-card">
+              <i class="fas fa-exchange-alt"></i>
+              <h3>Reprise de votre ancien véhicule</h3>
+              <p>Nous rachetons votre ancienne voiture au meilleur prix.</p>
+            </div>
+            <div class="service-card">
+              <i class="fas fa-tools"></i>
+              <h3>Service après-vente</h3>
+              <p>
+                Un service après-vente de qualité pour l'entretien de votre
+                véhicule.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="testimonials container">
+          <h2>Témoignages clients</h2>
+          <div
+            v-for="testimonial in testimonials"
+            :key="testimonial.id"
+            class="testimonial-card"
+          >
+            <p>"{{ testimonial.content }}"</p>
+            <div class="testimonial-author">{{ testimonial.author }}</div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <div class="container">
+          <div class="footer-content">
+            <div class="footer-section">
+              <h3>À propos de nous</h3>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem et mollitia impedit animi odit molestias.</p>
+            </div>
+            <div class="footer-section">
+              <h3>Liens rapides</h3>
+              <ul>
+                <li><a href="/recherche">Recherche avancée</a></li>
+                <li><a href="/financement">Options de financement</a></li>
+                <li><a href="/garantie">Garantie</a></li>
+                <li><a href="/faq">FAQ</a></li>
+              </ul>
+            </div>
+            <div class="footer-section">
+              <h3>Contact</h3>
+             
+              
+              <p>Email : boubacar.bah.zola@gmail.com</p>
+            </div>
+            <div class="footer-section">
+              <h3>Suivez-nous</h3>
+              <div class="footer-section">
+                
+                <div class="social-icons">
+                <a href="https://github.com/BoubaBah" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://www.linkedin.com/in/boubacar-bah-0828a6263/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+            </div>
+          </div>
+          <div style="text-align: center; margin-top: 20px;">
+            <p>&copy; 2024 VoituresOccasion. Tous droits réservés.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          searchParams: {
+            brand: "",
+            model: "",
+            year: "",
+            maxPrice: null,
+            maxMileage: null,
+            fuelType: "",
+          },
+          brands: [
+            "Renault",
+            "Peugeot",
+            "Citroën",
+            "Volkswagen",
+            "BMW",
+            "Mercedes",
+            "Audi",
+            "Toyota",
+          ],
+          models: [],
+          years: Array.from(
+            { length: 20 },
+            (_, i) => new Date().getFullYear() - i
+          ),
+          featuredCars: [
+            {
+              id: 1,
+              brand: "Renault",
+              model: "Clio",
+              year: 2019,
+              mileage: 25000,
+              price: 12500,
+              fuelType: "Essence",
+              image: "https://voituresoccasion.fr/images/renault-clio.jpg",
+            },
+            {
+              id: 2,
+              brand: "Peugeot",
+              model: "308",
+              year: 2020,
+              mileage: 15000,
+              price: 18000,
+              fuelType: "Diesel",
+              image: "https://voituresoccasion.fr/images/peugeot-308.jpg",
+            },
+            {
+              id: 3,
+              brand: "Volkswagen",
+              model: "Golf",
+              year: 2018,
+              mileage: 35000,
+              price: 16500,
+              fuelType: "Essence",
+              image: "https://voituresoccasion.fr/images/volkswagen-golf.jpg",
+            },
+            {
+              id: 4,
+              brand: "BMW",
+              model: "Série 3",
+              year: 2021,
+              mileage: 10000,
+              price: 32000,
+              fuelType: "Hybride",
+              image: "https://voituresoccasion.fr/images/bmw-serie3.jpg",
+            },
+          ],
+          latestOffers: [
+            {
+              id: 5,
+              brand: "Audi",
+              model: "A3",
+              year: 2020,
+              mileage: 20000,
+              price: 25000,
+              fuelType: "Essence",
+              image: "https://voituresoccasion.fr/images/audi-a3.jpg",
+            },
+            {
+              id: 6,
+              brand: "Toyota",
+              model: "Yaris",
+              year: 2021,
+              mileage: 5000,
+              price: 15000,
+              fuelType: "Hybride",
+              image: "https://voituresoccasion.fr/images/toyota-yaris.jpg",
+            },
+            {
+              id: 7,
+              brand: "Mercedes",
+              model: "Classe A",
+              year: 2019,
+              mileage: 30000,
+              price: 28000,
+              fuelType: "Diesel",
+              image: "https://voituresoccasion.fr/images/mercedes-classe-a.jpg",
+            },
+            {
+              id: 8,
+              brand: "Citroën",
+              model: "C3",
+              year: 2020,
+              mileage: 18000,
+              price: 13500,
+              fuelType: "Essence",
+              image: "https://voituresoccasion.fr/images/citroen-c3.jpg",
+            },
+          ],
+          testimonials: [
+            {
+              id: 1,
+              content:
+                "J'ai trouvé ma voiture idéale grâce à VoituresOccasion. Le processus était simple et rapide.",
+              author: "Marie D.",
+            },
+            {
+              id: 2,
+              content:
+                "Excellent service client et un large choix de véhicules. Je recommande vivement !",
+              author: "Thomas L.",
+            },
+            {
+              id: 3,
+              content:
+                "Les options de financement proposées m'ont permis d'acheter la voiture de mes rêves. Merci VoituresOccasion !",
+              author: "Sophie M.",
+            },
+          ],
+        },
+        methods: {
+          searchCars() {
+            // Ici, vous implémenteriez la logique de recherche réelle
+            console.log("Recherche avec les paramètres:", this.searchParams);
+            // Vous feriez normalement un appel API ici
+            alert(
+              "Recherche effectuée ! Consultez la console pour voir les paramètres."
+            );
+          },
+          showCarDetails(carId) {
+            // Ici, vous implémenteriez la logique pour afficher les détails d'une voiture
+            console.log("Affichage des détails de la voiture ID:", carId);
+            // Vous pourriez rediriger vers une page de détails ou ouvrir une modal
+            alert(`Affichage des détails de la voiture ID: ${carId}`);
+          },
+        },
+        watch: {
+          "searchParams.brand": function (newBrand) {
+            // Simuler le chargement des modèles en fonction de la marque
+            if (newBrand === "Renault") {
+              this.models = ["Clio", "Megane", "Captur", "Kadjar"];
+            } else if (newBrand === "Peugeot") {
+              this.models = ["208", "308", "3008", "5008"];
+            } else if (newBrand === "Citroën") {
+              this.models = ["C3", "C4", "C5", "Berlingo"];
+            } else {
+              this.models = [];
+            }
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

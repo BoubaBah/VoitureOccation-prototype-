@@ -1,0 +1,323 @@
+<html><head>
+<title>Nos Services - VoituresOccasion</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Découvrez notre gamme complète de services pour l'achat, l'entretien et la garantie de votre véhicule d'occasion. VoituresOccasion vous accompagne à chaque étape.">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+<style>
+  :root {
+    --primary-color: #1a5f7a;
+    --secondary-color: #f1f1f1;
+    --accent-color: #ff6b35;
+    --text-color: #333;
+    --light-gray: #e0e0e0;
+  }
+  
+  body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+    background-color: #fff;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  header {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 20px 0;
+  }
+  
+  nav ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  h1, h2, h3 {
+    color: var(--primary-color);
+  }
+  
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+  }
+  
+  .service-card {
+    background-color: var(--secondary-color);
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+  
+  .service-icon {
+    font-size: 3em;
+    color: var(--accent-color);
+    margin-bottom: 20px;
+  }
+  
+  .service-card h3 {
+    margin-top: 0;
+  }
+  
+  .cta-button {
+    display: inline-block;
+    background-color: var(--accent-color);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .cta-button:hover {
+    background-color: #e55a2b;
+  }
+  
+  .testimonials {
+    margin-top: 60px;
+  }
+  
+  .testimonial-card {
+    background-color: var(--secondary-color);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .testimonial-content {
+    font-style: italic;
+    margin-bottom: 10px;
+  }
+  
+  .testimonial-author {
+    font-weight: bold;
+    text-align: right;
+  }
+  
+  footer {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 40px 0;
+    margin-top: 50px;
+  }
+  
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .footer-section {
+    flex: 1;
+    margin-right: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .footer-section h3 {
+    color: #fff;
+    margin-bottom: 15px;
+  }
+  
+  .footer-section ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .footer-section ul li {
+    margin-bottom: 10px;
+  }
+  
+  .footer-section ul li a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .social-icons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .social-icons a {
+    color: #fff;
+    font-size: 1.5em;
+  }
+  
+  @media (max-width: 768px) {
+    .services-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <div class="container">
+        <nav>
+          <ul>
+            <li><a href="/">Accueil</a></li>
+            <li><a href="rechercheAvancer.html">Recherche avancée</a></li>
+            <li><a href="Comparaison.html">Comparaison</a></li>
+            <li><a href="Financement.html">Financement</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="contacte.html">Contact</a></li>
+            <li><a href="loging.html">Espace client</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <h1>Nos Services</h1>
+      <p>Chez VoituresOccasion, nous nous engageons à vous offrir une expérience complète et sans souci pour l'achat et l'entretien de votre véhicule d'occasion. Découvrez notre gamme de services conçus pour répondre à tous vos besoins.</p>
+
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">
+            <i class="fas fa-car-side"></i>
+          </div>
+          <h3>Garantie étendue</h3>
+          <p>Profitez d'une tranquillité d'esprit totale avec notre garantie étendue, couvrant les réparations majeures jusqu'à 24 mois après l'achat.</p>
+          <a href="/garantie" class="cta-button">En savoir plus</a>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <i class="fas fa-tools"></i>
+          </div>
+          <h3>Entretien et réparation</h3>
+          <p>Bénéficiez de tarifs préférentiels dans notre réseau de garages partenaires pour l'entretien et les réparations de votre véhicule.</p>
+          <a href="/entretien" class="cta-button">Voir les offres</a>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <i class="fas fa-exchange-alt"></i>
+          </div>
+          <h3>Reprise de votre ancien véhicule</h3>
+          <p>Simplifiez votre achat en nous confiant la reprise de votre ancien véhicule. Estimation gratuite et offre compétitive garantie.</p>
+          <a href="/reprise" class="cta-button">Estimer ma reprise</a>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <i class="fas fa-file-contract"></i>
+          </div>
+          <h3>Accompagnement administratif</h3>
+          <p>Laissez-nous gérer toutes les démarches administratives liées à votre achat : carte grise, assurance, et plus encore.</p>
+          <a href="/demarches" class="cta-button">Nos services</a>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <i class="fas fa-truck"></i>
+          </div>
+          <h3>Livraison à domicile</h3>
+          <p>Recevez votre nouveau véhicule directement chez vous. Service de livraison disponible dans toute la France métropolitaine.</p>
+          <a href="/livraison" class="cta-button">Options de livraison</a>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">
+            <i class="fas fa-car-battery"></i>
+          </div>
+          <h3>Véhicules électriques et hybrides</h3>
+          <p>Découvrez notre sélection de véhicules écologiques et bénéficiez de conseils d'experts pour votre transition vers l'électrique.</p>
+          <a href="/vehicules-eco" class="cta-button">Explorer</a>
+        </div>
+      </div>
+
+      <section class="testimonials">
+        <h2>Ce que disent nos clients</h2>
+        <div class="testimonial-card">
+          <p class="testimonial-content">"J'ai été impressionné par la qualité du service chez VoituresOccasion. De la recherche du véhicule parfait à la livraison à domicile, tout s'est déroulé sans accroc. Je recommande vivement !"</p>
+          <p class="testimonial-author">- Marie L.</p>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-content">"Le service de reprise a grandement facilité mon achat. L'estimation était juste et le processus très rapide. Un grand merci à toute l'équipe pour leur professionnalisme."</p>
+          <p class="testimonial-author">- Thomas D.</p>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-content">"La garantie étendue m'a donné une vraie tranquillité d'esprit. Quand j'ai eu un problème, tout a été pris en charge rapidement et efficacement. C'est un service qui vaut vraiment le coup."</p>
+          <p class="testimonial-author">- Sophie M.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>À propos de nous</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem et mollitia impedit animi odit molestias.</p>
+          </div>
+          <div class="footer-section">
+            <h3>Liens rapides</h3>
+            <ul>
+              <li><a href="/recherche">Recherche avancée</a></li>
+              <li><a href="/financement">Options de financement</a></li>
+              <li><a href="/garantie">Garantie</a></li>
+              <li><a href="/faq">FAQ</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h3>Contact</h3>
+            
+            
+            <p>Email : boubacar.bah.zola@gmail.com</p>
+          </div>
+          <div class="footer-section">
+            <h3>Suivez-nous</h3>
+            <div class="footer-section">
+             
+              <div class="social-icons">
+              <a href="https://github.com/BoubaBah" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+              <a href="https://www.linkedin.com/in/boubacar-bah-0828a6263/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+              </div>
+          </div>
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+          <p>&copy; 2024 VoituresOccasion. Tous droits réservés.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        // Vous pouvez ajouter des données réactives ici si nécessaire
+      },
+      methods: {
+        // Vous pouvez ajouter des méthodes ici si nécessaire
+      }
+    });
+  </script>
+</body>
+</html>

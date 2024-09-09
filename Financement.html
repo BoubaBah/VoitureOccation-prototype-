@@ -1,0 +1,375 @@
+<html><head>
+<title>Options de Financement - VoituresOccasion</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Découvrez nos options de financement flexibles pour l'achat de votre véhicule d'occasion. Simulez votre crédit auto et trouvez la solution adaptée à votre budget.">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+<style>
+  :root {
+    --primary-color: #1a5f7a;
+    --secondary-color: #f1f1f1;
+    --accent-color: #ff6b35;
+    --text-color: #333;
+    --light-gray: #e0e0e0;
+  }
+  
+  body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+    background-color: #fff;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  header {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 20px 0;
+  }
+  
+  nav ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  h1, h2, h3 {
+    color: var(--primary-color);
+  }
+  
+  .financing-options {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 30px;
+  }
+  
+  .financing-option {
+    width: 30%;
+    background-color: var(--secondary-color);
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  .financing-option h3 {
+    margin-top: 0;
+  }
+  
+  .financing-option ul {
+    padding-left: 20px;
+  }
+  
+  .simulator {
+    background-color: var(--secondary-color);
+    border-radius: 5px;
+    padding: 20px;
+    margin-top: 30px;
+  }
+  
+  .simulator h2 {
+    margin-top: 0;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .form-group input[type="number"],
+  .form-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--light-gray);
+    border-radius: 4px;
+  }
+  
+  button {
+    background-color: var(--accent-color);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  button:hover {
+    background-color: #e55a2b;
+  }
+  
+  .result {
+    margin-top: 20px;
+    font-weight: bold;
+  }
+  
+  .chart-container {
+    margin-top: 30px;
+  }
+  
+  footer {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 40px 0;
+    margin-top: 50px;
+  }
+  
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .footer-section {
+    flex: 1;
+    margin-right: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .footer-section h3 {
+    color: #fff;
+    margin-bottom: 15px;
+  }
+  
+  .footer-section ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .footer-section ul li {
+    margin-bottom: 10px;
+  }
+  
+  .footer-section ul li a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .social-icons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .social-icons a {
+    color: #fff;
+    font-size: 1.5em;
+  }
+  
+  @media (max-width: 768px) {
+    .financing-option {
+      width: 100%;
+    }
+  }
+</style>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <div class="container">
+        <nav>
+          <ul>
+            <li><a href="/">Accueil</a></li>
+            <li><a href="rechercheAvancer.html">Recherche avancée</a></li>
+            <li><a href="Comparaison.html">Comparaison</a></li>
+            <li><a href="Financement.html">Financement</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="contacte.html">Contact</a></li>
+            <li><a href="loging.html">Espace client</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <h1>Options de Financement</h1>
+      <p>Chez VoituresOccasion, nous comprenons que l'achat d'une voiture est un investissement important. C'est pourquoi nous proposons plusieurs options de financement flexibles pour vous aider à acquérir le véhicule de vos rêves.</p>
+      
+      <div class="financing-options">
+        <div class="financing-option">
+          <h3>Crédit classique</h3>
+          <ul>
+            <li>Taux d'intérêt compétitifs</li>
+            <li>Durée de remboursement flexible (12 à 84 mois)</li>
+            <li>Possibilité de remboursement anticipé</li>
+            <li>Mensualités fixes pour une meilleure gestion de budget</li>
+          </ul>
+        </div>
+        <div class="financing-option">
+          <h3>Location avec Option d'Achat (LOA)</h3>
+          <ul>
+            <li>Loyers mensuels réduits</li>
+            <li>Possibilité d'acheter le véhicule en fin de contrat</li>
+            <li>Renouvellement facile du véhicule</li>
+            <li>Entretien inclus dans certaines offres</li>
+          </ul>
+        </div>
+        <div class="financing-option">
+          <h3>Leasing</h3>
+          <ul>
+            <li>Pas d'apport initial nécessaire</li>
+            <li>Loyers mensuels attractifs</li>
+            <li>Changement de véhicule régulier</li>
+            <li>Fiscalité avantageuse pour les professionnels</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="simulator">
+        <h2>Simulateur de crédit auto</h2>
+        <p>Utilisez notre simulateur pour estimer vos mensualités en fonction du montant emprunté, de la durée du prêt et du taux d'intérêt.</p>
+        <div class="form-group">
+          <label for="loanAmount">Montant du prêt (€)</label>
+          <input type="number" id="loanAmount" v-model.number="loanAmount" min="1000" max="100000" step="1000">
+        </div>
+        <div class="form-group">
+          <label for="loanTerm">Durée du prêt (mois)</label>
+          <select id="loanTerm" v-model.number="loanTerm">
+            <option v-for="term in loanTerms" :value="term">{{ term }} mois</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="interestRate">Taux d'intérêt annuel (%)</label>
+          <input type="number" id="interestRate" v-model.number="interestRate" min="0" max="20" step="0.1">
+        </div>
+        <button @click="calculateLoan">Calculer</button>
+        <div class="result" v-if="monthlyPayment">
+          Mensualité estimée : {{ monthlyPayment.toFixed(2) }} €
+        </div>
+        <div class="chart-container">
+          <canvas id="loanChart"></canvas>
+        </div>
+      </div>
+
+      <div class="additional-info">
+        <h2>Informations complémentaires</h2>
+        <p>Avant de vous engager dans un financement, voici quelques points importants à considérer :</p>
+        <ul>
+          <li>Évaluez votre budget mensuel pour déterminer la mensualité que vous pouvez assumer confortablement.</li>
+          <li>Comparez les différentes options de financement pour trouver celle qui correspond le mieux à votre situation.</li>
+          <li>N'oubliez pas de prendre en compte les coûts annexes comme l'assurance, l'entretien et le carburant dans votre budget auto.</li>
+          <li>Renseignez-vous sur les conditions de remboursement anticipé et les éventuelles pénalités.</li>
+          <li>Vérifiez votre cote de crédit avant de faire une demande de financement, car elle peut influencer les taux qui vous seront proposés.</li>
+        </ul>
+        <p>Notre équipe de conseillers financiers est à votre disposition pour vous guider dans le choix de la meilleure option de financement. N'hésitez pas à nous contacter pour un rendez-vous personnalisé.</p>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>À propos de nous</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem et mollitia impedit animi odit molestias.</p>
+          </div>
+          <div class="footer-section">
+            <h3>Liens rapides</h3>
+            <ul>
+              <li><a href="/recherche">Recherche avancée</a></li>
+              <li><a href="/financement">Options de financement</a></li>
+              <li><a href="/garantie">Garantie</a></li>
+              <li><a href="/faq">FAQ</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h3>Contact</h3>
+            
+            
+            <p>Email : boubacar.bah.zola@gmail.com</p>
+          </div>
+          <div class="footer-section">
+            <h3>Suivez-nous</h3>
+            <div class="footer-section">
+             
+              <div class="social-icons">
+              <a href="https://github.com/BoubaBah" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+              <a href="https://www.linkedin.com/in/boubacar-bah-0828a6263/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+              </div>
+          </div>
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+          <p>&copy; 2024 VoituresOccasion. Tous droits réservés.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        loanAmount: 15000,
+        loanTerm: 48,
+        interestRate: 4.5,
+        monthlyPayment: null,
+        loanTerms: [12, 24, 36, 48, 60, 72, 84],
+        chart: null
+      },
+      methods: {
+        calculateLoan() {
+          const r = this.interestRate / 100 / 12;
+          const n = this.loanTerm;
+          const P = this.loanAmount;
+          this.monthlyPayment = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+          this.updateChart();
+        },
+        updateChart() {
+          const ctx = document.getElementById('loanChart').getContext('2d');
+          const totalInterest = this.monthlyPayment * this.loanTerm - this.loanAmount;
+          
+          if (this.chart) {
+            this.chart.destroy();
+          }
+          
+          this.chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+              labels: ['Principal', 'Intérêts'],
+              datasets: [{
+                data: [this.loanAmount, totalInterest],
+                backgroundColor: ['#1a5f7a', '#ff6b35']
+              }]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: {
+                  position: 'top',
+                },
+                title: {
+                  display: true,
+                  text: 'Répartition du coût total du prêt'
+                }
+              }
+            }
+          });
+        }
+      },
+      mounted() {
+        this.calculateLoan();
+      }
+    });
+  </script>
+</body>
+</html>

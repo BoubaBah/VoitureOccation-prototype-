@@ -1,0 +1,487 @@
+<html><head>
+<title>Comparaison de véhicules - VoituresOccasion</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Comparez facilement les caractéristiques, performances et prix des véhicules d'occasion sur VoituresOccasion. Trouvez la voiture qui vous convient le mieux.">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+<style>
+  :root {
+    --primary-color: #1a5f7a;
+    --secondary-color: #f1f1f1;
+    --accent-color: #ff6b35;
+    --text-color: #333;
+    --light-gray: #e0e0e0;
+  }
+  
+  body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+    background-color: #fff;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  header {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 20px 0;
+  }
+  
+  nav ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  h1, h2, h3 {
+    color: var(--primary-color);
+  }
+  
+  .comparison-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+  }
+  
+  .car-selector {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+  }
+  
+  .car-select {
+    width: 30%;
+  }
+  
+  .car-select select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--light-gray);
+    border-radius: 5px;
+  }
+  
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .comparison-table th, .comparison-table td {
+    border: 1px solid var(--light-gray);
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .comparison-table th {
+    background-color: var(--secondary-color);
+    font-weight: bold;
+  }
+  
+  .comparison-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .highlight {
+    background-color: #e6f7ff;
+    font-weight: bold;
+  }
+  
+  .car-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  
+  .feature-icon {
+    margin-right: 5px;
+  }
+  
+  .pros-cons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .pros, .cons {
+    width: 48%;
+    background-color: var(--secondary-color);
+    border-radius: 5px;
+    padding: 15px;
+  }
+  
+  .pros h3, .cons h3 {
+    margin-top: 0;
+  }
+  
+  .pros ul, .cons ul {
+    padding-left: 20px;
+  }
+  
+  footer {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 40px 0;
+    margin-top: 50px;
+  }
+  
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .footer-section {
+    flex: 1;
+    margin-right: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .footer-section h3 {
+    color: #fff;
+    margin-bottom: 15px;
+  }
+  
+  .footer-section ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .footer-section ul li {
+    margin-bottom: 10px;
+  }
+  
+  .footer-section ul li a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .social-icons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .social-icons a {
+    color: #fff;
+    font-size: 1.5em;
+  }
+  
+  @media (max-width: 768px) {
+    .car-selector {
+      flex-direction: column;
+    }
+    
+    .car-select {
+      width: 100%;
+      margin-bottom: 15px;
+    }
+    
+    .comparison-table {
+      font-size: 14px;
+    }
+    
+    .pros-cons {
+      flex-direction: column;
+    }
+    
+    .pros, .cons {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+  }
+</style>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <div class="container">
+        <nav>
+          <ul>
+            <li><a href="/">Accueil</a></li>
+            <li><a href="rechercheAvancer.html">Recherche avancée</a></li>
+            <li><a href="Comparaison.html">Comparaison</a></li>
+            <li><a href="Financement.html">Financement</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="contacte.html">Contact</a></li>
+            <li><a href="loging.html">Espace client</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <h1>Comparaison de véhicules</h1>
+      <p>Sélectionnez jusqu'à trois véhicules pour les comparer côte à côte. Analysez leurs caractéristiques, performances et prix pour prendre une décision éclairée.</p>
+      
+      <div class="comparison-container">
+        <div class="car-selector">
+          <div class="car-select">
+            <select v-model="selectedCars[0]" @change="updateComparison">
+              <option value="">Sélectionnez un véhicule</option>
+              <option v-for="car in availableCars" :value="car.id">{{ car.brand }} {{ car.model }} ({{ car.year }})</option>
+            </select>
+          </div>
+          <div class="car-select">
+            <select v-model="selectedCars[1]" @change="updateComparison">
+              <option value="">Sélectionnez un véhicule</option>
+              <option v-for="car in availableCars" :value="car.id">{{ car.brand }} {{ car.model }} ({{ car.year }})</option>
+            </select>
+          </div>
+          <div class="car-select">
+            <select v-model="selectedCars[2]" @change="updateComparison">
+              <option value="">Sélectionnez un véhicule</option>
+              <option v-for="car in availableCars" :value="car.id">{{ car.brand }} {{ car.model }} ({{ car.year }})</option>
+            </select>
+          </div>
+        </div>
+        
+        <table class="comparison-table" v-if="comparisonData.length > 0">
+          <tr>
+            <th>Caractéristiques</th>
+            <th v-for="car in comparisonData">{{ car.brand }} {{ car.model }}</th>
+          </tr>
+          <tr>
+            <td>Image</td>
+            <td v-for="car in comparisonData">
+              <img src="voiture.jpg" width="100" />
+            </td>
+          </tr>
+          <tr>
+            <td>Année</td>
+            <td v-for="car in comparisonData" :class="{ highlight: isHighlight(car, 'year', 'max') }">{{ car.year }}</td>
+          </tr>
+          <tr>
+            <td>Prix</td>
+            <td v-for="car in comparisonData" :class="{ highlight: isHighlight(car, 'price', 'min') }">{{ car.price }} €</td>
+          </tr>
+          <tr>
+            <td>Kilométrage</td>
+            <td v-for="car in comparisonData" :class="{ highlight: isHighlight(car, 'mileage', 'min') }">{{ car.mileage }} km</td>
+          </tr>
+          <tr>
+            <td>Carburant</td>
+            <td v-for="car in comparisonData">{{ car.fuelType }}</td>
+          </tr>
+          <tr>
+            <td>Consommation</td>
+            <td v-for="car in comparisonData" :class="{ highlight: isHighlight(car, 'consumption', 'min') }">{{ car.consumption }} L/100km</td>
+          </tr>
+          <tr>
+            <td>Puissance</td>
+            <td v-for="car in comparisonData" :class="{ highlight: isHighlight(car, 'power', 'max') }">{{ car.power }} ch</td>
+          </tr>
+          <tr>
+            <td>Boîte de vitesses</td>
+            <td v-for="car in comparisonData">{{ car.transmission }}</td>
+          </tr>
+          <tr>
+            <td>Nombre de portes</td>
+            <td v-for="car in comparisonData">{{ car.doors }}</td>
+          </tr>
+          <tr>
+            <td>Couleur</td>
+            <td v-for="car in comparisonData">{{ car.color }}</td>
+          </tr>
+          <tr>
+            <td>Garantie</td>
+            <td v-for="car in comparisonData">{{ car.warranty }}</td>
+          </tr>
+          <tr>
+            <td>Climatisation</td>
+            <td v-for="car in comparisonData">
+              <i :class="['fas', car.airConditioning ? 'fa-check text-success' : 'fa-times text-danger']"></i>
+              {{ car.airConditioning ? 'Oui' : 'Non' }}
+            </td>
+          </tr>
+          <tr>
+            <td>GPS</td>
+            <td v-for="car in comparisonData">
+              <i :class="['fas', car.gps ? 'fa-check text-success' : 'fa-times text-danger']"></i>
+              {{ car.gps ? 'Oui' : 'Non' }}
+            </td>
+          </tr>
+          <tr>
+            <td>Bluetooth</td>
+            <td v-for="car in comparisonData">
+              <i :class="['fas', car.bluetooth ? 'fa-check text-success' : 'fa-times text-danger']"></i>
+              {{ car.bluetooth ? 'Oui' : 'Non' }}
+            </td>
+          </tr>
+          <tr>
+            <td>Caméra de recul</td>
+            <td v-for="car in comparisonData">
+              <i :class="['fas', car.rearCamera ? 'fa-check text-success' : 'fa-times text-danger']"></i>
+              {{ car.rearCamera ? 'Oui' : 'Non' }}
+            </td>
+          </tr>
+          <tr>
+            <td>Capteurs de stationnement</td>
+            <td v-for="car in comparisonData">
+              <i :class="['fas', car.parkingSensors ? 'fa-check text-success' : 'fa-times text-danger']"></i>
+              {{ car.parkingSensors ? 'Oui' : 'Non' }}
+            </td>
+          </tr>
+        </table>
+        
+        <div v-for="car in comparisonData" :key="car.id" class="pros-cons">
+          <div class="pros">
+            <h3>Points forts - {{ car.brand }} {{ car.model }}</h3>
+            <ul>
+              <li v-for="pro in car.pros">{{ pro }}</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <h3>Points faibles - {{ car.brand }} {{ car.model }}</h3>
+            <ul>
+              <li v-for="con in car.cons">{{ con }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>À propos de nous</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem et mollitia impedit animi odit molestias.</p>
+          </div>
+          <div class="footer-section">
+            <h3>Liens rapides</h3>
+            <ul>
+              <li><a href="/recherche">Recherche avancée</a></li>
+              <li><a href="/financement">Options de financement</a></li>
+              <li><a href="/garantie">Garantie</a></li>
+              <li><a href="/faq">FAQ</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h3>Contact</h3>
+            
+            
+            <p>Email : boubacar.bah.zola@gmail.com</p>
+          </div>
+          <div class="footer-section">
+            <h3>Suivez-nous</h3>
+            <div class="footer-section">
+              
+              <div class="social-icons">
+              <a href="https://github.com/BoubaBah" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+              <a href="https://www.linkedin.com/in/boubacar-bah-0828a6263/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+              </div>
+          </div>
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+          <p>&copy; 2024 VoituresOccasion. Tous droits réservés.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        availableCars: [
+          { id: 1, brand: 'Renault', model: 'Clio', year: 2019 },
+          { id: 2, brand: 'Peugeot', model: '308', year: 2020 },
+          { id: 3, brand: 'Volkswagen', model: 'Golf', year: 2018 },
+          { id: 4, brand: 'BMW', model: 'Série 3', year: 2021 },
+          { id: 5, brand: 'Audi', model: 'A3', year: 2020 },
+          { id: 6, brand: 'Toyota', model: 'Yaris', year: 2021 },
+          { id: 7, brand: 'Mercedes', model: 'Classe A', year: 2019 },
+          { id: 8, brand: 'Citroën', model: 'C3', year: 2020 },
+          { id: 9, brand: 'Ford', model: 'Focus', year: 2019 },
+          { id: 10, brand: 'Opel', model: 'Corsa', year: 2020 },
+          { id: 11, brand: 'Fiat', model: '500', year: 2021 },
+          { id: 12, brand: 'Nissan', model: 'Qashqai', year: 2018 },
+          { id: 13, brand: 'Hyundai', model: 'i30', year: 2020 },
+          { id: 14, brand: 'Kia', model: 'Ceed', year: 2019 },
+          { id: 15, brand: 'Seat', model: 'Leon', year: 2021 },
+        ],
+        selectedCars: ['', '', ''],
+        comparisonData: []
+      },
+      methods: {
+        updateComparison() {
+          this.comparisonData = this.selectedCars.filter(id => id !== '').map(id => {
+            const car = this.getCarDetails(id);
+            return {
+              ...car,
+              pros: this.generatePros(car),
+              cons: this.generateCons(car)
+            };
+          });
+        },
+        getCarDetails(id) {
+          const carDetails = {
+            1: { brand: 'Renault', model: 'Clio', year: 2019, price: 12500, mileage: 25000, fuelType: 'Essence', consumption: 5.2, power: 100, transmission: 'Manuelle', doors: 5, color: 'Rouge', warranty: '1 an', airConditioning: true, gps: false, bluetooth: true, rearCamera: false, parkingSensors: true, image: 'https://voituresoccasion.fr/images/renault-clio.jpg' },
+            2: { brand: 'Peugeot', model: '308', year: 2020, price: 18000, mileage: 15000, fuelType: 'Diesel', consumption: 4.8, power: 130, transmission: 'Automatique', doors: 5, color: 'Gris', warranty: '2 ans', airConditioning: true, gps: true, bluetooth: true, rearCamera: true, parkingSensors: true, image: 'https://voituresoccasion.fr/images/peugeot-308.jpg' },
+            3: { brand: 'Volkswagen', model: 'Golf', year: 2018, price: 16500, mileage: 35000, fuelType: 'Essence', consumption: 5.5, power: 115, transmission: 'Manuelle', doors: 5, color: 'Blanc', warranty: '1 an', airConditioning: true, gps: true, bluetooth: true, rearCamera: false, parkingSensors: true, image: 'https://voituresoccasion.fr/images/volkswagen-golf.jpg' },
+            4: { brand: 'BMW', model: 'Série 3', year: 2021, price: 32000, mileage: 10000, fuelType: 'Hybride', consumption: 2.1, power: 184, transmission: 'Automatique', doors: 4, color: 'Noir', warranty: '3 ans', airConditioning: true, gps: true, bluetooth: true, rearCamera: true, parkingSensors: true, image: 'https://voituresoccasion.fr/images/bmw-serie3.jpg' },
+            5: { brand: 'Audi', model: 'A3', year: 2020, price: 25000, mileage: 20000, fuelType: 'Essence', consumption: 5.0, power: 150, transmission: 'Automatique', doors: 5, color: 'Bleu', warranty: '2 ans', airConditioning: true, gps: true, bluetooth: true, rearCamera: true, parkingSensors: true, image: 'https://voituresoccasion.fr/images/audi-a3.jpg' },
+            6: { brand: 'Toyota', model: 'Yaris', year: 2021, price: 15000, mileage: 5000, fuelType: 'Hybride', consumption: 3.8, power: 116, transmission: 'Automatique', doors: 5, color: 'Rouge', warranty: '3 ans', airConditioning: true, gps: false, bluetooth: true, rearCamera: true, parkingSensors: true, image: 'https://voituresoccasion.fr/images/toyota-yaris.jpg' },
+            7: { brand: 'Mercedes', model: 'Classe A', year: 2019, price: 28000, mileage: 30000, fuelType: 'Diesel', consumption: 4.5, power: 136, transmission: 'Automatique', doors: 5, color: 'Gris', warranty: '2 ans', airConditioning: true, gps: true, bluetooth: true, rearCamera: true, parkingSensors: true, image: 'https://voituresoccasion.fr/images/mercedes-classe-a.jpg' },
+            8: { brand: 'Citroën', model: 'C3', year: 2020, price: 13500, mileage: 18000, fuelType: 'Essence', consumption: 4.9, power: 83, transmission: 'Manuelle', doors: 5, color: 'Blanc', warranty: '2 ans', airConditioning: true, gps: false, bluetooth: true, rearCamera: false, parkingSensors: true, image: 'https://voituresoccasion.fr/images/citroen-c3.jpg' },
+            9: { brand: 'Ford', model: 'Focus', year: 2019, price: 17500, mileage: 28000, fuelType: 'Essence', consumption: 5.3, power: 125, transmission: 'Manuelle', doors: 5, color: 'Bleu', warranty: '2 ans', airConditioning: true, gps: true, bluetooth: true, rearCamera: true, parkingSensors: true, image: 'https://voituresoccasion.fr/images/ford-focus.jpg' },
+            10: { brand: 'Opel', model: 'Corsa', year: 2020, price: 14000, mileage: 12000, fuelType: 'Essence', consumption: 4.7, power: 100, transmission: 'Manuelle', doors: 5, color: 'Rouge', warranty: '2 ans', airConditioning: true, gps: false, bluetooth: true, rearCamera: false, parkingSensors: true, image: 'https://voituresoccasion.fr/images/opel-corsa.jpg' },
+            11: { brand: 'Fiat', model: '500', year: 2021, price: 16000, mileage: 8000, fuelType: 'Électrique', consumption: 0, power: 118, transmission: 'Automatique', doors: 3, color: 'Vert', warranty: '3 ans', airConditioning: true, gps: true, bluetooth: true, rearCamera: true, parkingSensors: true, image: 'https://voituresoccasion.fr/images/fiat-500.jpg' },
+            12: { brand: 'Nissan', model: 'Qashqai', year: 2018, price: 19500, mileage: 45000, fuelType: 'Diesel', consumption: 5.1, power: 115, transmission: 'Manuelle', doors: 5, color: 'Gris', warranty: '1 an', airConditioning: true, gps: true, bluetooth: true, rearCamera: true, parkingSensors: true, image: 'https://voituresoccasion.fr/images/nissan-qashqai.jpg' },
+            13: { brand: 'Hyundai', model: 'i30', year: 2020, price: 18500, mileage: 22000, fuelType: 'Essence', consumption: 5.2, power: 120, transmission: 'Manuelle', doors: 5, color: 'Blanc', warranty: '2 ans', airConditioning: true, gps: true, bluetooth: true, rearCamera: true, parkingSensors: true, image: 'https://voituresoccasion.fr/images/hyundai-i30.jpg' },
+            14: { brand: 'Kia', model: 'Ceed', year: 2019, price: 17000, mileage: 32000, fuelType: 'Essence', consumption: 5.4, power: 140, transmission: 'Manuelle', doors: 5, color: 'Noir', warranty: '3 ans', airConditioning: true, gps: true, bluetooth: true, rearCamera: true, parkingSensors: true, image: 'https://voituresoccasion.fr/images/kia-ceed.jpg' },
+            15: { brand: 'Seat', model: 'Leon', year: 2021, price: 22000, mileage: 15000, fuelType: 'Hybride', consumption: 1.4, power: 204, transmission: 'Automatique', doors: 5, color: 'Rouge', warranty: '3 ans', airConditioning: true, gps: true, bluetooth: true, rearCamera: true, parkingSensors: true, image: 'https://voituresoccasion.fr/images/seat-leon.jpg' },
+          };
+          return carDetails[id];
+        },
+        generatePros(car) {
+          const pros = [];
+          if (car.price < 15000) pros.push('Prix compétitif');
+          if (car.mileage < 20000) pros.push('Faible kilométrage');
+          if (car.consumption < 5.0) pros.push('Faible consommation');
+          if (car.power > 130) pros.push('Bonnes performances');
+          if (car.warranty.includes('3 ans')) pros.push('Longue garantie');
+          if (car.gps && car.rearCamera && car.parkingSensors) pros.push('Bien équipé');
+          return pros;
+        },
+        generateCons(car) {
+          const cons = [];
+          if (car.price > 25000) cons.push('Prix élevé');
+          if (car.mileage > 50000) cons.push('Kilométrage important');
+          if (car.consumption > 6.0) cons.push('Consommation élevée');
+          if (car.power < 100) cons.push('Performances modestes');
+          if (car.warranty.includes('1 an')) cons.push('Courte garantie');
+          if (!car.gps && !car.rearCamera) cons.push('Équipement limité');
+          return cons;
+        },
+        isHighlight(car, property, type) {
+          if (this.comparisonData.length < 2) return false;
+          const values = this.comparisonData.map(c => c[property]);
+          if (type === 'min') {
+            return car[property] === Math.min(...values);
+          } else if (type === 'max') {
+            return car[property] === Math.max(...values);
+          }
+          return false;
+        }
+      }
+    });
+  </script>
+</body>
+</html>

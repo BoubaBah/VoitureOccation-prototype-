@@ -1,0 +1,619 @@
+<html>
+  <head>
+    <title>Recherche avancée - VoituresOccasion</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Utilisez notre moteur de recherche avancé pour trouver la voiture d'occasion parfaite. Filtrez par marque, modèle, prix, kilométrage et bien plus encore."
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-color: #1a5f7a;
+        --secondary-color: #f1f1f1;
+        --accent-color: #ff6b35;
+        --text-color: #333;
+        --light-gray: #e0e0e0;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        margin: 0;
+        padding: 0;
+        color: var(--text-color);
+        background-color: #fff;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      header {
+        background-color: var(--primary-color);
+        color: #fff;
+        padding: 20px 0;
+      }
+
+      nav ul {
+        list-style-type: none;
+        padding: 0;
+        display: flex;
+        justify-content: space-around;
+      }
+
+      nav ul li a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      h1,
+      h2,
+      h3 {
+        color: var(--primary-color);
+      }
+
+      .search-page {
+        display: flex;
+        margin-top: 30px;
+      }
+
+      .filters {
+        flex: 1;
+        padding-right: 30px;
+      }
+
+      .results {
+        flex: 3;
+      }
+
+      .filter-section {
+        margin-bottom: 20px;
+      }
+
+      .filter-section h3 {
+        margin-bottom: 10px;
+      }
+
+      .filter-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .filter-option {
+        background-color: var(--light-gray);
+        padding: 5px 10px;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .filter-option.active {
+        background-color: var(--accent-color);
+        color: #fff;
+      }
+
+      .slider {
+        margin-top: 10px;
+      }
+
+      .car-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+      }
+
+      .car-card {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+      }
+
+      .car-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .car-card img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+      }
+
+      .car-info {
+        padding: 15px;
+      }
+
+      .car-title {
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .car-price {
+        color: var(--accent-color);
+        font-weight: bold;
+        font-size: 1.2em;
+      }
+
+      .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+      }
+
+      .pagination button {
+        background-color: var(--primary-color);
+        color: #fff;
+        border: none;
+        padding: 10px 15px;
+        margin: 0 5px;
+        cursor: pointer;
+        border-radius: 3px;
+      }
+
+      .pagination button:disabled {
+        background-color: var(--light-gray);
+        cursor: not-allowed;
+      }
+
+      footer {
+        background-color: var(--primary-color);
+        color: #fff;
+        padding: 40px 0;
+        margin-top: 50px;
+      }
+
+      .footer-content {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+
+      .footer-section {
+        flex: 1;
+        margin-right: 20px;
+        margin-bottom: 20px;
+      }
+
+      .footer-section h3 {
+        color: #fff;
+        margin-bottom: 15px;
+      }
+
+      .footer-section ul {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      .footer-section ul li {
+        margin-bottom: 10px;
+      }
+
+      .footer-section ul li a {
+        color: #fff;
+        text-decoration: none;
+      }
+
+      .social-icons {
+        display: flex;
+        gap: 10px;
+      }
+
+      .social-icons a {
+        color: #fff;
+        font-size: 1.5em;
+      }
+
+      @media (max-width: 768px) {
+        .search-page {
+          flex-direction: column;
+        }
+
+        .filters {
+          padding-right: 0;
+          margin-bottom: 30px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <div class="container">
+          <nav>
+            <ul>
+              <li><a href="/">Accueil</a></li>
+              <li><a href="rechercheAvancer.html">Recherche avancée</a></li>
+              <li><a href="Comparaison.html">Comparaison</a></li>
+              <li><a href="Financement.html">Financement</a></li>
+              <li><a href="services.html">Services</a></li>
+              <li><a href="contacte.html">Contact</a></li>
+              <li><a href="loging.html">Espace client</a></li>
+            </ul>
+          </nav>
+        </div>
+      </header>
+
+      <main class="container">
+        <h1>Recherche avancée</h1>
+        <div class="search-page">
+          <aside class="filters">
+            <div class="filter-section">
+              <h3>Marque</h3>
+              <div class="filter-options">
+                <span
+                  v-for="brand in brands"
+                  :key="brand"
+                  @click="toggleFilter('brand', brand)"
+                  :class="['filter-option', { active: selectedFilters.brand.includes(brand) }]"
+                >
+                  {{ brand }}
+                </span>
+              </div>
+            </div>
+
+            <div class="filter-section">
+              <h3>Type de carburant</h3>
+              <div class="filter-options">
+                <span
+                  v-for="fuel in fuelTypes"
+                  :key="fuel"
+                  @click="toggleFilter('fuelType', fuel)"
+                  :class="['filter-option', { active: selectedFilters.fuelType.includes(fuel) }]"
+                >
+                  {{ fuel }}
+                </span>
+              </div>
+            </div>
+
+            <div class="filter-section">
+              <h3>Prix</h3>
+              <div id="price-slider" class="slider"></div>
+              <p>
+                {{ selectedFilters.price[0] }} € - {{ selectedFilters.price[1]
+                }} €
+              </p>
+            </div>
+
+            <div class="filter-section">
+              <h3>Kilométrage</h3>
+              <div id="mileage-slider" class="slider"></div>
+              <p>
+                {{ selectedFilters.mileage[0] }} km - {{
+                selectedFilters.mileage[1] }} km
+              </p>
+            </div>
+
+            <div class="filter-section">
+              <h3>Année</h3>
+              <div id="year-slider" class="slider"></div>
+              <p>
+                {{ selectedFilters.year[0] }} - {{ selectedFilters.year[1] }}
+              </p>
+            </div>
+
+            <button
+              @click="applyFilters"
+              style="
+                background-color: var(--accent-color);
+                color: #fff;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+              "
+            >
+              Appliquer les filtres
+            </button>
+          </aside>
+
+          <section class="results">
+            <h2>Résultats ({{ filteredCars.length }} véhicules)</h2>
+            <div class="car-grid">
+              <div v-for="car in paginatedCars" :key="car.id" class="car-card">
+                <img src="voiture.jpg" />
+                <div class="car-info">
+                  <div class="car-title">{{ car.brand }} {{ car.model }}</div>
+                  <div>{{ car.year }} - {{ car.mileage }} km</div>
+                  <div>{{ car.fuelType }}</div>
+                  <div class="car-price">{{ car.price }} €</div>
+                  <button
+                    @click="showCarDetails(car.id)"
+                    style="
+                      background-color: var(--primary-color);
+                      color: #fff;
+                      border: none;
+                      padding: 5px 10px;
+                      border-radius: 3px;
+                      cursor: pointer;
+                      margin-top: 10px;
+                    "
+                  >
+                    Voir les détails
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="pagination">
+              <button @click="prevPage" :disabled="currentPage === 1">
+                Précédent
+              </button>
+              <span>Page {{ currentPage }} sur {{ totalPages }}</span>
+              <button @click="nextPage" :disabled="currentPage === totalPages">
+                Suivant
+              </button>
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <footer>
+        <div class="container">
+          <div class="footer-content">
+            <div class="footer-section">
+              <h3>À propos de nous</h3>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem et mollitia impedit animi odit molestias.</p>
+            </div>
+            <div class="footer-section">
+              <h3>Liens rapides</h3>
+              <ul>
+                <li><a href="/recherche">Recherche avancée</a></li>
+                <li><a href="/financement">Options de financement</a></li>
+                <li><a href="/garantie">Garantie</a></li>
+                <li><a href="/faq">FAQ</a></li>
+              </ul>
+            </div>
+            <div class="footer-section">
+              <h3>Contact</h3>
+             
+              
+              <p>Email : boubacar.bah.zola@gmail.com</p>
+            </div>
+            <div class="footer-section">
+              <h3>Suivez-nous</h3>
+              <div class="footer-section">
+                
+                <div class="social-icons">
+                <a href="https://github.com/BoubaBah" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://www.linkedin.com/in/boubacar-bah-0828a6263/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+            </div>
+          </div>
+          <div style="text-align: center; margin-top: 20px;">
+            <p>&copy; 2024 VoituresOccasion. Tous droits réservés.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          brands: [
+            "Renault",
+            "Peugeot",
+            "Citroën",
+            "Volkswagen",
+            "BMW",
+            "Mercedes",
+            "Audi",
+            "Toyota",
+          ],
+          fuelTypes: ["Essence", "Diesel", "Électrique", "Hybride"],
+          selectedFilters: {
+            brand: [],
+            fuelType: [],
+            price: [5000, 50000],
+            mileage: [0, 200000],
+            year: [2010, 2023],
+          },
+          cars: [
+            {
+              id: 1,
+              brand: "Renault",
+              model: "Clio",
+              year: 2019,
+              mileage: 25000,
+              price: 12500,
+              fuelType: "Essence",
+              image: "https://voituresoccasion.fr/images/renault-clio.jpg",
+            },
+            {
+              id: 2,
+              brand: "Peugeot",
+              model: "308",
+              year: 2020,
+              mileage: 15000,
+              price: 18000,
+              fuelType: "Diesel",
+              image: "https://voituresoccasion.fr/images/peugeot-308.jpg",
+            },
+            {
+              id: 3,
+              brand: "Volkswagen",
+              model: "Golf",
+              year: 2018,
+              mileage: 35000,
+              price: 16500,
+              fuelType: "Essence",
+              image: "https://voituresoccasion.fr/images/volkswagen-golf.jpg",
+            },
+            {
+              id: 4,
+              brand: "BMW",
+              model: "Série 3",
+              year: 2021,
+              mileage: 10000,
+              price: 32000,
+              fuelType: "Hybride",
+              image: "https://voituresoccasion.fr/images/bmw-serie3.jpg",
+            },
+            {
+              id: 5,
+              brand: "Audi",
+              model: "A3",
+              year: 2020,
+              mileage: 20000,
+              price: 25000,
+              fuelType: "Essence",
+              image: "https://voituresoccasion.fr/images/audi-a3.jpg",
+            },
+            {
+              id: 6,
+              brand: "Toyota",
+              model: "Yaris",
+              year: 2021,
+              mileage: 5000,
+              price: 15000,
+              fuelType: "Hybride",
+              image: "https://voituresoccasion.fr/images/toyota-yaris.jpg",
+            },
+            {
+              id: 7,
+              brand: "Mercedes",
+              model: "Classe A",
+              year: 2019,
+              mileage: 30000,
+              price: 28000,
+              fuelType: "Diesel",
+              image: "https://voituresoccasion.fr/images/mercedes-classe-a.jpg",
+            },
+            {
+              id: 8,
+              brand: "Citroën",
+              model: "C3",
+              year: 2020,
+              mileage: 18000,
+              price: 13500,
+              fuelType: "Essence",
+              image: "https://voituresoccasion.fr/images/citroen-c3.jpg",
+            },
+            // Ajoutez plus de voitures ici pour avoir un jeu de données plus important
+          ],
+          currentPage: 1,
+          carsPerPage: 6,
+        },
+        computed: {
+          filteredCars() {
+            return this.cars.filter((car) => {
+              return (
+                (this.selectedFilters.brand.length === 0 ||
+                  this.selectedFilters.brand.includes(car.brand)) &&
+                (this.selectedFilters.fuelType.length === 0 ||
+                  this.selectedFilters.fuelType.includes(car.fuelType)) &&
+                car.price >= this.selectedFilters.price[0] &&
+                car.price <= this.selectedFilters.price[1] &&
+                car.mileage >= this.selectedFilters.mileage[0] &&
+                car.mileage <= this.selectedFilters.mileage[1] &&
+                car.year >= this.selectedFilters.year[0] &&
+                car.year <= this.selectedFilters.year[1]
+              );
+            });
+          },
+          paginatedCars() {
+            const start = (this.currentPage - 1) * this.carsPerPage;
+            const end = start + this.carsPerPage;
+            return this.filteredCars.slice(start, end);
+          },
+          totalPages() {
+            return Math.ceil(this.filteredCars.length / this.carsPerPage);
+          },
+        },
+        methods: {
+          toggleFilter(filterType, value) {
+            const index = this.selectedFilters[filterType].indexOf(value);
+            if (index === -1) {
+              this.selectedFilters[filterType].push(value);
+            } else {
+              this.selectedFilters[filterType].splice(index, 1);
+            }
+          },
+          applyFilters() {
+            this.currentPage = 1;
+            // Ici, vous pourriez ajouter une logique pour récupérer les voitures filtrées depuis une API
+          },
+          showCarDetails(carId) {
+            // Rediriger vers la page de détails de la voiture
+            window.location.href = `/voiture/${carId}`;
+          },
+          prevPage() {
+            if (this.currentPage > 1) {
+              this.currentPage--;
+            }
+          },
+          nextPage() {
+            if (this.currentPage < this.totalPages) {
+              this.currentPage++;
+            }
+          },
+        },
+        mounted() {
+          // Initialiser les sliders
+          const priceSlider = document.getElementById("price-slider");
+          noUiSlider.create(priceSlider, {
+            start: [5000, 50000],
+            connect: true,
+            range: {
+              min: 5000,
+              max: 50000,
+            },
+            step: 1000,
+          });
+          priceSlider.noUiSlider.on("update", (values, handle) => {
+            this.selectedFilters.price = values.map(Number);
+          });
+
+          const mileageSlider = document.getElementById("mileage-slider");
+          noUiSlider.create(mileageSlider, {
+            start: [0, 200000],
+            connect: true,
+            range: {
+              min: 0,
+              max: 200000,
+            },
+            step: 5000,
+          });
+          mileageSlider.noUiSlider.on("update", (values, handle) => {
+            this.selectedFilters.mileage = values.map(Number);
+          });
+
+          const yearSlider = document.getElementById("year-slider");
+          noUiSlider.create(yearSlider, {
+            start: [2010, 2023],
+            connect: true,
+            range: {
+              min: 2010,
+              max: 2023,
+            },
+            step: 1,
+          });
+          yearSlider.noUiSlider.on("update", (values, handle) => {
+            this.selectedFilters.year = values.map(Number);
+          });
+        },
+      });
+    </script>
+  </body>
+</html>
